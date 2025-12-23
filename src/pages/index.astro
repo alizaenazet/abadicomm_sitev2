@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import FAQ from "../components/FAQ.svelte";
 import { getCollection } from "astro:content";
+import { getEntry } from "astro:content";
 import { ArrowRight, Star, ShieldCheck, Zap } from "@lucide/svelte";
 import ContactModal from "../components/ContactModal.svelte";
 
@@ -10,6 +11,9 @@ const featuredPortfolios = allPortfolios
 	.map((entry) => ({ ...entry.data, slug: entry.slug }))
 	.sort((a, b) => Number(b.year) - Number(a.year))
 	.slice(0, 3);
+
+const galleryPage = await getEntry("pages", "gallery");
+const galleryData = galleryPage?.data;
 ---
 
 <Layout>
@@ -320,7 +324,8 @@ const featuredPortfolios = allPortfolios
 		</div>
 
 		<!-- Dual Behavior Scroller: Native Scroll + JS Auto Scroll -->
-		<div
+		 {galleryData && (
+		 <div
 			id="activity-scroller"
 			class="flex gap-4 overflow-x-auto no-scrollbar whitespace-nowrap px-4 cursor-grab active:cursor-grabbing"
 			style="-webkit-overflow-scrolling: touch;"
@@ -328,10 +333,10 @@ const featuredPortfolios = allPortfolios
 			<!-- Set 1 -->
 			<div class="flex gap-4 shrink-0" id="activity-set-1">
 				{
-					[1, 2, 3, 4, 5, 6].map((i) => (
+					galleryData.images.slice(0, 6).map((imgSrc, index) => (
 						<div class="w-[300px] h-[200px] flex-shrink-0 rounded-xl overflow-hidden relative group">
 							<img
-								src={`https://dummyjson.com/image/600x400/222${i}/fff?text=Activity+${i}`}
+								src={imgSrc}
 								class="w-full h-full object-cover"
 								alt="Activity"
 								loading="lazy"
@@ -344,10 +349,10 @@ const featuredPortfolios = allPortfolios
 			<!-- Set 2 (Clone for Infinite Loop) -->
 			<div class="flex gap-4 shrink-0" id="activity-set-2">
 				{
-					[1, 2, 3, 4, 5, 6].map((i) => (
+					galleryData.images.slice(0, 6).map((imgSrc, index) => (
 						<div class="w-[300px] h-[200px] flex-shrink-0 rounded-xl overflow-hidden relative group">
 							<img
-								src={`https://dummyjson.com/image/600x400/222${i}/fff?text=Activity+${i}`}
+								src={imgSrc}
 								class="w-full h-full object-cover"
 								alt="Activity"
 								loading="lazy"
@@ -366,7 +371,9 @@ const featuredPortfolios = allPortfolios
 					>Load More Gallery</a
 				>
 			</div>
-		</div>
+		</div>)
+		}
+
 
 		<!-- FAQ Section -->
 		<section class="py-20 md:py-28 bg-secondary/30">
