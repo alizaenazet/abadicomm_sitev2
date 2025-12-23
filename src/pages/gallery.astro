@@ -1,0 +1,61 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Generate 24 dummy images for the gallery
+const galleryImages = Array.from({ length: 24 }, (_, i) => ({
+    id: i + 1,
+    src: `https://dummyjson.com/image/500x500/000/fff?text=Activity+${i + 1}`,
+    alt: `Activity Documentation ${i + 1}`,
+}));
+---
+
+<Layout
+    title="Activity Gallery - Abadicomm"
+    description="Explore our latest event activities and documentation."
+>
+    <div class="pt-32 pb-16 md:pt-40 md:pb-24">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 space-y-4">
+                <h1 class="text-4xl md:text-5xl font-bold">Activity Gallery</h1>
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+                    Dokumentasi keseruan dari berbagai event yang telah kami
+                    selenggarakan.
+                </p>
+            </div>
+
+            <div
+                class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4"
+            >
+                {
+                    galleryImages.map((image) => (
+                        <div class="aspect-square overflow-hidden rounded-xl bg-secondary/20 group relative cursor-pointer">
+                            <img
+                                src={image.src}
+                                alt={image.alt}
+                                loading="lazy"
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="text-white font-medium border border-white/50 px-4 py-2 rounded-full backdrop-blur-sm">
+                                    View
+                                </span>
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+
+            <div class="mt-16 text-center">
+                <p class="text-muted-foreground mb-6">
+                    Want to see your event here?
+                </p>
+                <a
+                    href="/#contact"
+                    class="inline-block bg-primary text-primary-foreground px-8 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity"
+                >
+                    Start Project With Us
+                </a>
+            </div>
+        </div>
+    </div>
+</Layout>

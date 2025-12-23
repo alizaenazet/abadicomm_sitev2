@@ -1,0 +1,31 @@
+{
+    "$schema": "https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json",
+    "backend": {
+        "name": "github",
+        "repo": "abadicomm-site-ssg",
+        "branch": "main"
+    },
+    "media_folder": "public/uploads",
+    "public_folder": "/uploads",
+    "media_libraries": {
+        "default": {
+            "config": {
+                "max_file_size": 1024000,
+                "slugify_filename": true,
+                "transformations": {
+                    "raster_image": {
+                        "format": "webp",
+                        "quality": 85,
+                        "width": 1200,
+                        "height": 1200
+                    }
+                }
+            }
+        }
+    },
+    // the collection will works for each porfolio detail and also will make the categories and years will be able to showed as list in the porfolio list page.
+    "collections": [ // add collection for each porfolio detail and gallery
+        {
+        }
+    ]
+}

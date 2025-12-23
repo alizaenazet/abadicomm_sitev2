@@ -1,0 +1,52 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Handshake } from "@lucide/svelte";
+import ContactModalAsPartner from "../components/ContactModalAsPartner.svelte";
+---
+
+<Layout
+    title="Partnership - Abadicomm"
+    description="Collaborate with us. We are committed to providing the best service and partnering with relevant businesses."
+>
+    <div class="pt-32 pb-16 md:pt-40 md:pb-24">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center space-y-8">
+                <div
+                    class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 text-primary mb-6"
+                >
+                    <Handshake class="w-10 h-10" />
+                </div>
+
+                <h1 class="text-4xl md:text-5xl font-bold">Partner With Us</h1>
+
+                <div
+                    class="prose prose-lg dark:prose-invert mx-auto leading-relaxed text-muted-foreground"
+                >
+                    <p
+                        class="text-xl md:text-2xl font-serif italic text-foreground"
+                    >
+                        "Sebagai perusahaan event organizer, kami selalu
+                        berkomitmen untuk memberikan pelayanan terbaik kepada
+                        klien kami. Salah satu upaya kami untuk mewujudkan
+                        komitmen tersebut adalah dengan menjalin kerjasama
+                        dengan pengusaha-pengusaha yang memiliki usaha yang
+                        relevan dengan event."
+                    </p>
+                </div>
+
+                <div class="pt-12">
+                    <p class="text-muted-foreground mb-6">
+                        Interested in becoming a vendor or partner?
+                    </p>
+                    <ContactModalAsPartner client:idle>
+                        <button
+                            class="inline-block bg-primary text-primary-foreground px-8 py-4 rounded-full font-bold text-lg hover:opacity-90 transition-opacity shadow-lg"
+                        >
+                            Contact Us for Partnership
+                        </button>
+                    </ContactModalAsPartner>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>

@@ -1,0 +1,34 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PortfolioList from "../../components/PortfolioList.svelte";
+import { getCollection } from "astro:content";
+
+const allPortfolios = await getCollection("portfolios");
+
+// Sort by latest year default (Descending, Newest first)
+const sortedPortfolios = allPortfolios
+    .map((entry) => ({
+        id: entry.slug,
+        slug: entry.slug,
+        ...entry.data,
+    }))
+    .sort((a, b) => Number(b.year) - Number(a.year));
+---
+
+<Layout
+    title="Portfolios - Abadicomm"
+    description="Explore our successful events and creative works."
+>
+    <div class="bg-secondary/30 py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Our Portfolios</h1>
+            <p class="text-muted-foreground max-w-2xl mx-auto text-lg">
+                Jejak rekam kami dalam menciptakan momen tak terlupakan.
+            </p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-12 md:py-20">
+        <PortfolioList items={sortedPortfolios} client:load />
+    </div>
+</Layout>
