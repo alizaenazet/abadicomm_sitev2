@@ -4,7 +4,7 @@
         "name": "github",
         "repo": "alizaenazet/abadicomm_sitev2",
         "branch": "main",
-        "base_url": "https://localhost:3005"
+        "base_url": "https://sveltia-cms-auth.alizaendev.workers.dev"
     },
     "media_folder": "public/uploads",
     "public_folder": "/uploads",
