@@ -1,0 +1,37 @@
+{
+  "categories": [
+    {
+      "name": "Festival"
+    },
+    {
+      "name": "Concert"
+    },
+    {
+      "name": "Company"
+    },
+    {
+      "name": "Music"
+    },
+    {
+      "name": "School"
+    },
+    {
+      "name": "Nature"
+    },
+    {
+      "name": "Exhibition"
+    },
+    {
+      "name": "Family"
+    },
+    {
+      "name": "Education"
+    },
+    {
+      "name": "Religion"
+    },
+    {
+      "name": "Goverment"
+    }
+  ]
+}

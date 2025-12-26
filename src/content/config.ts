@@ -13,16 +13,19 @@ const portfolios = defineCollection({
   })
 });
 
-const pages = defineCollection({
+const site_content = defineCollection({
   type: 'data',
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    images: z.array(z.string())
+    title: z.string().optional(),
+    description: z.string().optional(),
+    images: z.array(z.string()).optional(),
+    categories: z.array(z.object({
+      name: z.string()
+    })).optional()
   })
 });
 
 export const collections = {
   portfolios,
-  pages
+  site_content
 };
