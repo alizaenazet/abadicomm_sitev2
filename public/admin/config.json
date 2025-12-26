@@ -1,116 +1,134 @@
 {
-    "$schema": "https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json",
-    "backend": {
-        "name": "github",
-        "repo": "alizaenazet/abadicomm_sitev2",
-        "branch": "main",
-        "base_url": "https://sveltia-cms-auth.alizaendev.workers.dev"
-    },
-    "media_folder": "public/uploads",
-    "public_folder": "/uploads",
-    "media_libraries": {
-        "default": {
-            "config": {
-                "max_file_size": 1024000,
-                "slugify_filename": true,
-                "transformations": {
-                    "raster_image": {
-                        "format": "webp",
-                        "quality": 85,
-                        "width": 1200,
-                        "height": 1200
-                    }
-                }
-            }
+  "$schema": "https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json",
+  "backend": {
+    "name": "github",
+    "repo": "alizaenazet/abadicomm_sitev2",
+    "branch": "main",
+    "base_url": "https://sveltia-cms-auth.alizaendev.workers.dev"
+  },
+  "media_folder": "public/uploads",
+  "public_folder": "/uploads",
+  "media_libraries": {
+    "default": {
+      "config": {
+        "max_file_size": 1024000,
+        "slugify_filename": true,
+        "transformations": {
+          "raster_image": {
+            "format": "webp",
+            "quality": 85,
+            "width": 1200,
+            "height": 1200
+          }
         }
-    },
-    "collections": [
+      }
+    }
+  },
+  "collections": [
+    {
+      "name": "site_content",
+      "label": "Site Content",
+      "files": [
         {
-            "name": "portfolios",
-            "label": "Portfolios",
-            "folder": "src/content/portfolios",
-            "create": true,
-            "slug": "{{slug}}",
-            "fields": [
+          "name": "categories",
+          "label": "Categories",
+          "file": "src/content/site_content/categories.json",
+          "fields": [
+            {
+              "label": "Categories",
+              "name": "categories",
+              "widget": "list",
+              "fields": [
                 {
-                    "label": "Title",
-                    "name": "title",
-                    "widget": "string"
-                },
-                {
-                    "label": "Slug",
-                    "name": "slug",
-                    "widget": "string"
-                },
-                {
-                    "label": "Categories",
-                    "name": "categories",
-                    "widget": "list",
-                    "default": ["Event"]
-                },
-                {
-                    "label": "Year",
-                    "name": "year",
-                    "widget": "string"
-                },
-                {
-                    "label": "Clients / Hosters",
-                    "name": "hosters",
-                    "widget": "list"
-                },
-                {
-                    "label": "Description",
-                    "name": "description",
-                    "widget": "text"
-                },
-                {
-                    "label": "Thumbnail",
-                    "name": "thumbnail",
-                    "widget": "image"
-                },
-                {
-                    "label": "Gallery Images",
-                    "name": "images",
-                    "widget": "list",
-                    "required": false,
-                    "min": 0,
-                    "max": 6,
-                    "field": {
-                         "label": "Image",
-                         "name": "image",
-                         "widget": "image"
-                    }
+                  "label": "Category Name",
+                  "name": "name",
+                  "widget": "string"
                 }
-            ]
+              ]
+            }
+          ]
         },
         {
-            "name": "pages",
-            "label": "Static Pages",
-            "files": [
-                {
-                    "name": "gallery",
-                    "label": "Gallery Page",
-                    "file": "src/content/pages/gallery.json",
-                    "fields": [
-                        {
-                            "label": "Page Title",
-                            "name": "title",
-                            "widget": "string"
-                        },
-                        {
-                            "label": "Short Description",
-                            "name": "description",
-                            "widget": "text"
-                        },
-                        {
-                            "name": "images",
-                            "label": "Photos",
-                            "widget": "image",
-                            "multiple": true
-                        }
-                    ]
-                }
-            ]
+          "name": "gallery",
+          "label": "Gallery Page",
+          "file": "src/content/site_content/gallery.json",
+          "fields": [
+            {
+              "label": "Page Title",
+              "name": "title",
+              "widget": "string"
+            },
+            {
+              "label": "Short Description",
+              "name": "description",
+              "widget": "text"
+            },
+            {
+              "name": "images",
+              "label": "Photos",
+              "widget": "image",
+              "multiple": true
+            }
+          ]
         }
-    ]
+      ]
+    },
+    {
+      "name": "portfolios",
+      "label": "Portfolios",
+      "folder": "src/content/portfolios",
+      "create": true,
+      "fields": [
+        {
+          "label": "Title",
+          "name": "title",
+          "widget": "string"
+        },
+        {
+          "label": "Categories",
+          "name": "categories",
+          "widget": "relation",
+          "collection": "site_content",
+          "file": "categories",
+          "search_fields": ["categories.*.name"],
+          "value_field": "categories.*.name",
+          "display_fields": ["categories.*.name"],
+          "multiple": true
+        },
+        {
+          "label": "Year",
+          "name": "year",
+          "widget": "string"
+        },
+        {
+          "label": "Clients / Hosters",
+          "name": "hosters",
+          "widget": "list"
+        },
+        {
+          "label": "Description",
+          "name": "description",
+          "widget": "text"
+        },
+        {
+          "label": "Thumbnail",
+          "name": "thumbnail",
+          "widget": "image"
+        },
+        {
+          "label": "Gallery Images",
+          "name": "images",
+          "widget": "list",
+          "required": false,
+          "min": 0,
+          "max": 6,
+          "field": {
+            "label": "Image",
+            "name": "image",
+            "widget": "image"
+          }
+        }
+      ]
+    }
+  ]
 }

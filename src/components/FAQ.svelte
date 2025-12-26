@@ -13,7 +13,7 @@
     },
     {
       question: "Bagaimana cara memesan jasa Abadicomm?",
-      answer: "Anda dapat menghubungi kami melalui tombol 'Contact US' di website ini atau melalui WhatsApp/Email yang tertera. Tim kami akan segera menjadwalkan konsultasi gratis untuk membahas kebutuhan acara Anda."
+      answer: "Anda dapat menghubungi kami melalui tombol 'Contact US' di website ini atau melalui WhatsApp yang tertera. Tim kami akan segera menjadwalkan konsultasi gratis untuk membahas kebutuhan acara Anda."
     }
   ];
 

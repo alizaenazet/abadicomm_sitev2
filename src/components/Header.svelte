@@ -44,8 +44,15 @@
   <div
     class="container mx-auto px-4 flex justify-between items-center relative z-50"
   >
-    <a href="/" class="text-2xl font-bold tracking-tighter" onclick={closeMenu}>
-      Abadi<span class="text-primary">Comm</span>
+    <a
+      href="/"
+      class="flex items-center gap-2 text-2xl font-bold tracking-tighter"
+      onclick={closeMenu}
+    >
+      <img src="/abadicommLogo.webp" alt="AbadiComm Logo" class="w-8 h-8" />
+      <span class="text-red-600">Abadi</span><span class="text-blue-400"
+        >Comm</span
+      >
     </a>
 
     <!-- Desktop Menu -->
