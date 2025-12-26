@@ -8,8 +8,8 @@ const allPortfolios = await getCollection("portfolios");
 // Sort by latest year default (Descending, Newest first)
 const sortedPortfolios = allPortfolios
     .map((entry) => ({
-        id: entry.slug,
-        slug: entry.slug,
+        id: entry.data.title.replace(/\s+/g, '_'),
+        slug: entry.data.title.replace(/\s+/g, '_'),
         ...entry.data,
     }))
     .sort((a, b) => Number(b.year) - Number(a.year));

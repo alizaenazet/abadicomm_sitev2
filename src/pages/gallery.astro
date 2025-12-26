@@ -2,11 +2,11 @@
 import Layout from "../layouts/Layout.astro";
 import { getEntry } from "astro:content";
 
-const galleryPage = await getEntry("pages", "gallery");
+const galleryPage = await getEntry("site_content", "gallery");
 const { title, description, images } = galleryPage!.data;
 ---
 
-<Layout title={`${title} - Abadicomm`} description={description}>
+<Layout title={`${title} | Abadicomm`} description={description} openGraphImage="gallery">
     <div class="pt-32 pb-16 md:pt-40 md:pb-24">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16 space-y-4">
@@ -20,7 +20,7 @@ const { title, description, images } = galleryPage!.data;
                 class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4"
             >
                 {
-                    images.map((imgSrc, index) => (
+                    (images??[]).map((imgSrc, index) => (
                         <div class="aspect-square overflow-hidden rounded-xl bg-secondary/20 group relative cursor-pointer">
                             <img
                                 src={imgSrc}

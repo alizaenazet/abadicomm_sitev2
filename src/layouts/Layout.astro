@@ -2,16 +2,25 @@
 import "../styles/global.css";
 import Header from "../components/Header.svelte";
 import Footer from "../components/Footer.svelte";
+import { SEO } from "astro-seo";
 
 interface Props {
 	title?: string;
 	description?: string;
+	openGraphTitle?: string;
+	openGraphType?: string;
+	openGraphImage?: string;
 }
 
 const {
-	title = "Abadicomm - Trusted Event Organizer in Surabaya",
-	description = "Abadicomm is the best and trusted Event Organizer in Surabaya, Indonesia. We provide creative and professional event management services.",
+	title = "Event Organizer Terpercaya di Surabaya | Abadicomm",
+	description = "Abadicomm adalah penyelenggara acara terpercaya di Surabaya, Indonesia. Kami menyediakan layanan manajemen acara yang kreatif dan profesional.",
+	openGraphTitle = title,
+	openGraphType = "website",
+	openGraphImage,
 } = Astro.props;
+
+const ogImage = new URL(`/open-graph/${title.replace(/\s+/g, '_')}.png`, Astro.url.origin).toString();
 ---
 
 <!doctype html>
@@ -23,6 +32,18 @@ const {
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
 		<title>{title}</title>
+		<SEO 
+			title={title}
+			description={description}
+			openGraph={{
+				basic: {
+					title: openGraphTitle,
+					type: openGraphType,
+					image: openGraphImage ?? ogImage,
+					url: Astro.url.href
+				}
+			}}
+		/>
 	</head>
 	<body class="min-h-screen flex flex-col">
 		<Header client:load />

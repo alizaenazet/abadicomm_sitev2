@@ -6,12 +6,12 @@ import { ArrowLeft, Calendar, User, Tag } from "@lucide/svelte";
 export async function getStaticPaths() {
     const portfolios = await getCollection("portfolios");
     return portfolios.map((entry) => ({
-        params: { slug: entry.slug },
+        params: { slug: entry.data.title.replace(/\s+/g, '_') },
         props: {
             portfolio: {
                 ...entry.data,
-                slug: entry.slug,
-                id: entry.slug,
+                slug: entry.data.title.replace(/\s+/g, '_'),
+                id: entry.data.title.replace(/\s+/g, '_'),
             },
         },
     }));
@@ -23,6 +23,7 @@ const { portfolio } = Astro.props;
 <Layout
     title={`${portfolio.title} - Abadicomm`}
     description={portfolio.description}
+    openGraphImage={portfolio.title}
 >
     <!-- Hero / Header -->
     <div class="relative h-[60vh] min-h-[500px]">

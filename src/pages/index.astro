@@ -3,27 +3,29 @@ import Layout from "../layouts/Layout.astro";
 import FAQ from "../components/FAQ.svelte";
 import { getCollection } from "astro:content";
 import { getEntry } from "astro:content";
-import { ArrowRight, Star, ShieldCheck, Zap } from "@lucide/svelte";
+import { ArrowRight, Star, Network, Blocks } from "@lucide/svelte";
 import ContactModal from "../components/ContactModal.svelte";
 
 const allPortfolios = await getCollection("portfolios");
 const featuredPortfolios = allPortfolios
-	.map((entry) => ({ ...entry.data, slug: entry.slug }))
+	.map((entry) => ({ ...entry.data, slug: entry.data.title.replace(/\s+/g, '_') }))
 	.sort((a, b) => Number(b.year) - Number(a.year))
 	.slice(0, 3);
 
-const galleryPage = await getEntry("pages", "gallery");
+const galleryPage = await getEntry("site_content", "gallery");
 const galleryData = galleryPage?.data;
 ---
 
-<Layout>
+<Layout
+	openGraphImage="homepage"
+>
 	<!-- Hero Section -->
 	<section
 		class="relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden"
 	>
 		<div class="absolute inset-0 z-0">
 			<img
-				src="https://dummyjson.com/image/1920x1080/111827/ffffff?text=Event+Atmosphere"
+				src="/uploads/event-atmosphere.webp"
 				alt="Event Atmosphere"
 				class="w-full h-full object-cover"
 			/>
@@ -35,9 +37,9 @@ const galleryData = galleryPage?.data;
 
 		<div class="container mx-auto px-4 relative z-10 text-center">
 			<span
-				class="inline-block animate-in fade-in slide-in-from-bottom-4 duration-700 px-4 py-1.5 mb-6 text-sm font-semibold tracking-wider text-primary bg-primary/10 rounded-full border border-primary/20"
+				class="inline-block animate-in fade-in slide-in-from-bottom-4 duration-700 px-4 py-1.5 mb-6 text-sm font-semibold tracking-wider text-black bg-primary/10 rounded-full border border-primary/20"
 			>
-				NO.1 EVENT ORGANIZER IN SURABAYA
+				NO.1 EVENT ORGANIZER DI SURABAYA
 			</span>
 			<h1
 				class="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100 text-5xl md:text-7xl font-bold tracking-tight mb-6 text-foreground max-w-4xl mx-auto leading-tight"
@@ -84,7 +86,7 @@ const galleryData = galleryPage?.data;
 					>
 					</div>
 					<img
-						src="https://dummyjson.com/image/800x600/222/fff?text=Our+Team"
+						src="/uploads/group-photo.webp"
 						alt="Abadicomm Team"
 						class="relative rounded-2xl shadow-xl border border-white/10 w-full"
 					/>
@@ -123,7 +125,7 @@ const galleryData = galleryPage?.data;
 							<div
 								class="p-3 bg-primary/10 rounded-xl h-fit text-primary"
 							>
-								<ShieldCheck class="w-6 h-6" />
+								<Network class="w-6 h-6" />
 							</div>
 							<div>
 								<h3 class="font-semibold mb-2">
@@ -207,7 +209,7 @@ const galleryData = galleryPage?.data;
 					<div
 						class="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
 					>
-						<Zap class="w-7 h-7" />
+						<Blocks class="w-7 h-7" />
 					</div>
 					<h3 class="text-xl font-bold mb-3">Concept Creation</h3>
 					<p class="text-muted-foreground">
@@ -223,7 +225,7 @@ const galleryData = galleryPage?.data;
 					<div
 						class="w-14 h-14 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
 					>
-						<ShieldCheck class="w-7 h-7" />
+						<Network class="w-7 h-7" />
 					</div>
 					<h3 class="text-xl font-bold mb-3">Event Production</h3>
 					<p class="text-muted-foreground">
@@ -333,7 +335,7 @@ const galleryData = galleryPage?.data;
 			<!-- Set 1 -->
 			<div class="flex gap-4 shrink-0" id="activity-set-1">
 				{
-					galleryData.images.slice(0, 6).map((imgSrc, index) => (
+					(galleryData.images??[]).slice(0, 6).map((imgSrc, index) => (
 						<div class="w-[300px] h-[200px] flex-shrink-0 rounded-xl overflow-hidden relative group">
 							<img
 								src={imgSrc}
@@ -349,7 +351,7 @@ const galleryData = galleryPage?.data;
 			<!-- Set 2 (Clone for Infinite Loop) -->
 			<div class="flex gap-4 shrink-0" id="activity-set-2">
 				{
-					galleryData.images.slice(0, 6).map((imgSrc, index) => (
+					(galleryData.images??[]).slice(0, 6).map((imgSrc, index) => (
 						<div class="w-[300px] h-[200px] flex-shrink-0 rounded-xl overflow-hidden relative group">
 							<img
 								src={imgSrc}
@@ -399,8 +401,7 @@ const galleryData = galleryPage?.data;
 				<p
 					class="text-primary-foreground/80 text-lg md:text-xl mb-10 max-w-2xl mx-auto"
 				>
-					Jangan ragu untuk berdiskusi dengan kami. Konsultasi pertama
-					gratis!
+					Jangan ragu untuk berdiskusi dengan kami. Kami Siap Membantu.
 				</p>
 				<ContactModal client:idle>
 					<button
