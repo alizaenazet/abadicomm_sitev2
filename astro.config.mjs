@@ -9,6 +9,9 @@ export default defineConfig({
   site: "https://abadicomm.com",
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      allowedHosts: ["abadicomm.com"],
+    },
   },
   integrations: [svelte()],
 });

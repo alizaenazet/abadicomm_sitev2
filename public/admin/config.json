@@ -106,11 +106,6 @@
           "widget": "list"
         },
         {
-          "label": "Description",
-          "name": "description",
-          "widget": "text"
-        },
-        {
           "label": "Thumbnail",
           "name": "thumbnail",
           "widget": "image"
@@ -127,6 +122,16 @@
             "name": "image",
             "widget": "image"
           }
+        },
+        {
+            "label": "Deskripsi Singkat",
+            "name": "description",
+            "widget": "string"
+        },
+        {
+          "label": "Body",
+          "name": "body",
+          "widget": "markdown"
         }
       ]
     }
