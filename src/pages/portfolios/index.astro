@@ -8,8 +8,8 @@ const allPortfolios = await getCollection("portfolios");
 // Sort by latest year default (Descending, Newest first)
 const sortedPortfolios = allPortfolios
     .map((entry) => ({
-        id: entry.data.title.replace(/\s+/g, '_'),
-        slug: entry.data.title.replace(/\s+/g, '_'),
+        id: entry.data.title.toLowerCase().replace(/\s+/g, '-'),
+        slug: entry.data.title.toLowerCase().replace(/\s+/g, '-'),
         ...entry.data,
     }))
     .sort((a, b) => Number(b.year) - Number(a.year));
@@ -18,6 +18,7 @@ const sortedPortfolios = allPortfolios
 <Layout
     title="Portfolios - Abadicomm"
     description="Explore our successful events and creative works."
+    openGraphImage="portfolios"
 >
     <div class="bg-secondary/30 py-20">
         <div class="container mx-auto px-4 text-center">

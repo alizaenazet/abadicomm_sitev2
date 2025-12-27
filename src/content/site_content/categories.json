@@ -1,37 +1,43 @@
 {
   "categories": [
     {
-      "name": "Festival"
+      "name": "Workshop"
     },
     {
-      "name": "Concert"
+      "name": "Gathering"
     },
     {
-      "name": "Company"
+      "name": "Peluncuran Produk"
     },
     {
-      "name": "Music"
+      "name": "Soft Opening dan Grand Opening"
     },
     {
-      "name": "School"
-    },
-    {
-      "name": "Nature"
+      "name": "Sport Event"
     },
     {
       "name": "Exhibition"
     },
     {
-      "name": "Family"
+      "name": "Roadshow"
     },
     {
-      "name": "Education"
+      "name": "Entertaintment"
     },
     {
-      "name": "Religion"
+      "name": "Anniversary"
     },
     {
-      "name": "Goverment"
+      "name": "Show"
+    },
+    {
+      "name": "Lomba"
+    },
+    {
+      "name": "Seminar"
+    },
+    {
+      "name": "Sosialisasi"
     }
   ]
 }

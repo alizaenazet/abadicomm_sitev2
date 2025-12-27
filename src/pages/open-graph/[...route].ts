@@ -29,6 +29,10 @@ export const { getStaticPaths, GET } = OGImageRoute({
       description:
         "Lihat momen-momen berkesan dari acara-acara yang kami kelola.",
     },
+    portfolios: {
+        title: "Portofolio Abadicomm",
+        description: "Jelajahi portofolio acara-acara sukses yang telah kami kelola.",
+    },
     ...pages,
   },
 
@@ -38,10 +42,12 @@ export const { getStaticPaths, GET } = OGImageRoute({
     description: page.description,
     logo: {
       path: "./public/abadicommLogo.png",
+      size:[128,128],
     },
     font:{
         title: {
-            color: [255,255,255]
+            color: [255,255,255],
+            size: 64,
         },
         description:{
             color: [255,255,255]
@@ -50,7 +56,8 @@ export const { getStaticPaths, GET } = OGImageRoute({
     bgImage: {
        path: "./src/assets/OGBackground.jpeg",
        fit: "cover",
-    }
+    },
     // There are a bunch more options you can use here!
+    cacheDir: false,
   }),
 });

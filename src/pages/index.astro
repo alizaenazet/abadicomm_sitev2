@@ -5,10 +5,11 @@ import { getCollection } from "astro:content";
 import { getEntry } from "astro:content";
 import { ArrowRight, Star, Network, Blocks } from "@lucide/svelte";
 import ContactModal from "../components/ContactModal.svelte";
+import { Image } from "astro:assets";
 
 const allPortfolios = await getCollection("portfolios");
 const featuredPortfolios = allPortfolios
-	.map((entry) => ({ ...entry.data, slug: entry.data.title.replace(/\s+/g, '_') }))
+	.map((entry) => ({ ...entry.data, slug: entry.data.title.toLowerCase().replace(/\s+/g, '-') }))
 	.sort((a, b) => Number(b.year) - Number(a.year))
 	.slice(0, 3);
 
@@ -24,10 +25,13 @@ const galleryData = galleryPage?.data;
 		class="relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden"
 	>
 		<div class="absolute inset-0 z-0">
-			<img
+			<Image
 				src="/uploads/event-atmosphere.webp"
 				alt="Event Atmosphere"
 				class="w-full h-full object-cover"
+				width={1920}
+				height={1080}
+				widths={[400, 800, 1200]}
 			/>
 			<div
 				class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"
@@ -85,10 +89,13 @@ const galleryData = galleryPage?.data;
 						class="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-purple-500/20 rounded-2xl blur-2xl opacity-70"
 					>
 					</div>
-					<img
+					<Image
 						src="/uploads/group-photo.webp"
 						alt="Abadicomm Team"
 						class="relative rounded-2xl shadow-xl border border-white/10 w-full"
+						width={1200}
+						height={850}
+						widths={[400, 800, 1200]}
 					/>
 				</div>
 				<div>

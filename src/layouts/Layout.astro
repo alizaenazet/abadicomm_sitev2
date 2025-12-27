@@ -14,13 +14,20 @@ interface Props {
 
 const {
 	title = "Event Organizer Terpercaya di Surabaya | Abadicomm",
-	description = "Abadicomm adalah penyelenggara acara terpercaya di Surabaya, Indonesia. Kami menyediakan layanan manajemen acara yang kreatif dan profesional.",
+	description = "Abadicomm adalah penyelenggara acara terpercaya di Surabaya. Kami menyediakan layanan manajemen acara yang kreatif dan profesional.",
 	openGraphTitle = title,
 	openGraphType = "website",
 	openGraphImage,
 } = Astro.props;
 
-const ogImage = new URL(`/open-graph/${title.replace(/\s+/g, '_')}.png`, Astro.url.origin).toString();
+const ogImage = openGraphImage 
+	? new URL(`/open-graph/${openGraphImage}.png`, Astro.url.origin).toString() 
+	: new URL(`/open-graph/${Astro.url.pathname.split('/').filter(Boolean).pop()}.png`, Astro.url.origin).toString();
+
+console.log("OG IMAGE PARAMS: ", openGraphImage);
+console.log("OGIMAGE URL:", ogImage	);
+
+
 ---
 
 <!doctype html>
@@ -39,7 +46,7 @@ const ogImage = new URL(`/open-graph/${title.replace(/\s+/g, '_')}.png`, Astro.u
 				basic: {
 					title: openGraphTitle,
 					type: openGraphType,
-					image: openGraphImage ?? ogImage,
+					image: ogImage,
 					url: Astro.url.href
 				}
 			}}
