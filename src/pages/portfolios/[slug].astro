@@ -50,7 +50,7 @@ const { Content } = await entry.render();
           <Tag class="w-5 h-5 text-primary" />
           <span>{portfolio.categories.join(", ")}</span>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 text-white">
           <User class="w-5 h-5 text-primary" />
           <span>{portfolio.hosters.join(", ")}</span>
         </div>
@@ -98,32 +98,32 @@ const { Content } = await entry.render();
       <!-- Sidebar CTA -->
       <div class="lg:col-span-1">
         <div class="sticky top-24 bg-secondary/30 p-8 rounded-2xl border">
-          <h3 class="text-xl font-bold mb-4">Interested in similar event?</h3>
+          <h3 class="text-xl font-bold mb-4">Tertarik dengan event serupa?</h3>
           <p class="text-muted-foreground mb-6">
-            Let us help you create spectacular events like this one. Contact us
-            for a free consultation.
+            Biarkan kami membantu Anda menciptakan acara spektakuler seperti ini.
+            Hubungi kami untuk konsultasi gratis.
           </p>
           <a
             href="/#contact"
             class="block w-full text-center py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity"
           >
-            Wujudkan event anda dengan kami
+            Wujudkan event anda <br/> dengan kami
           </a>
           <div class="mt-6 pt-6 border-t">
             <h4 class="font-semibold mb-2 text-sm">Event Details</h4>
             <ul class="space-y-2 text-sm text-muted-foreground">
               <li class="flex justify-between">
-                <span>Client:</span>
+                <span>Penyelenggara:</span>
                 <span class="text-foreground"
                   >{portfolio.hosters.join(", ")}</span
                 >
               </li>
               <li class="flex justify-between">
-                <span>Year:</span>
+                <span>Tahun:</span>
                 <span class="text-foreground">{portfolio.year}</span>
               </li>
               <li class="flex justify-between">
-                <span>Category:</span>
+                <span>Kategori:</span>
                 <span class="text-foreground"
                   >{portfolio.categories.join(", ")}</span
                 >

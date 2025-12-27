@@ -125,7 +125,7 @@
             <div class="space-y-3">
                 <span
                     class="text-sm font-semibold uppercase tracking-wider text-muted-foreground"
-                    >Categories</span
+                    >Kategori</span
                 >
                 <div class="flex flex-wrap gap-2">
                     {#each categories as category}
@@ -149,7 +149,7 @@
             <div class="space-y-3 pt-4 border-t border-border/50">
                 <span
                     class="text-sm font-semibold uppercase tracking-wider text-muted-foreground"
-                    >Years</span
+                    >Tahun</span
                 >
                 <div class="flex flex-wrap gap-2">
                     {#each years as year}
@@ -319,7 +319,7 @@
                         class="pt-3 flex items-center gap-2 text-xs text-muted-foreground border-t mt-3"
                     >
                         <span class="font-semibold text-foreground"
-                            >Client:</span
+                            >Peyelenggara:</span
                         >
                         {item.hosters[0]}
                         {item.hosters.length > 1

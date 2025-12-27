@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import FAQ from "../components/FAQ.svelte";
 import { getCollection } from "astro:content";
 import { getEntry } from "astro:content";
-import { ArrowRight, Star, Network, Blocks } from "@lucide/svelte";
+import { ArrowRight, Star, Warehouse, Network, Blocks, BadgeCheck } from "@lucide/svelte";
 import ContactModal from "../components/ContactModal.svelte";
 import { Image } from "astro:assets";
 
@@ -105,10 +105,10 @@ const galleryData = galleryPage?.data;
 					<p
 						class="text-muted-foreground mb-8 text-lg leading-relaxed"
 					>
-						Berdiri di jantung kota Surabaya, Abadicomm telah
+						Abadicomm sejak 2010 telah
 						menjadi mitra terpercaya bagi ratusan perusahaan dan
-						individu. Visi kami sederhana: <strong
-							>Mengubah ide menjadi realitas yang memukau.</strong
+						individu. Visi kami: <strong
+							>Mewujudkan momen sebagai arena pertumbuhan, citra positif, dan pencapaian target nilai.</strong
 						>
 					</p>
 					<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -132,7 +132,7 @@ const galleryData = galleryPage?.data;
 							<div
 								class="p-3 bg-primary/10 rounded-xl h-fit text-primary"
 							>
-								<Network class="w-6 h-6" />
+								<BadgeCheck class="w-6 h-6" />
 							</div>
 							<div>
 								<h3 class="font-semibold mb-2">
@@ -248,12 +248,11 @@ const galleryData = galleryPage?.data;
 					<div
 						class="w-14 h-14 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
 					>
-						<Star class="w-7 h-7" />
+						<Warehouse class="w-7 h-7" />
 					</div>
-					<h3 class="text-xl font-bold mb-3">Talent Management</h3>
+					<h3 class="text-xl font-bold mb-3">Penyewaan dan Pengadaan</h3>
 					<p class="text-muted-foreground">
-						Penyediaan MC, Musisi/Band, dan performa hiburan kelas
-						atas.
+						Layanan penyewaan dan pengadaan lengkap (venue, peralatan, dekorasi) dengan vendor terpercaya dan penawaran harga terbaik.
 					</p>
 				</div>
 			</div>
@@ -377,7 +376,7 @@ const galleryData = galleryPage?.data;
 				<a
 					href="/gallery"
 					class="text-sm font-semibold border px-6 py-2 rounded-full hover:bg-secondary transition-colors inline-block"
-					>Load More Gallery</a
+					>Lihat semua Gallery</a
 				>
 			</div>
 		</div>)
