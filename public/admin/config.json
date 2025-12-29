@@ -52,6 +52,8 @@
           "name": "gallery",
           "label": "Gallery Page",
           "file": "src/content/site_content/gallery.json",
+          "media_folder": "/public/uploads/gallery",
+          "public_folder": "/uploads/gallery",
           "fields": [
             {
               "label": "Page Title",
