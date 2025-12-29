@@ -80,6 +80,8 @@
       "label": "Portfolios",
       "folder": "src/content/portfolios",
       "create": true,
+      "media_folder": "/public/uploads/portfolio-images",
+      "public_folder": "/uploads/portfolio-images",
       "fields": [
         {
           "label": "Title",
