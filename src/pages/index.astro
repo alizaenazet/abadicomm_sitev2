@@ -13,9 +13,27 @@ const featuredPortfolios = allPortfolios
 	.sort((a, b) => Number(b.year) - Number(a.year))
 	.slice(0, 3);
 
+
+const clientLogos = [
+"/uploads/aflamidi_logo.webp",
+"/uploads/ancol_logo.webp",
+"/uploads/bkkbn_logo.webp",
+"/uploads/ibid_astra_logo.webp",
+"/uploads/indomaret_logo.webp",
+"/uploads/kemendag_logo.webp",
+"/uploads/kompas_logo.webp",
+"/uploads/pemda_jatim_logo.webp",
+"/uploads/pemkot_surabaya_logo.webp",
+"/uploads/philips_logo.webp",
+"/uploads/semen_gresik_logo.webp",
+"/uploads/toyota_logo.webp",
+"/uploads/ucs_logo.webp",
+]
+
 const galleryPage = await getEntry("site_content", "gallery");
 const galleryData = galleryPage?.data;
 ---
+
 
 <Layout
 	openGraphImage="homepage"
@@ -171,10 +189,10 @@ const galleryData = galleryPage?.data;
 				class="flex gap-6 md:gap-12 shrink-0 items-center justify-around min-w-full"
 			>
 				{
-					[1, 2, 3, 4, 5, 6, 7].map((i) => (
+					clientLogos.map((url) => (
 						<img
-							src={`https://dummyjson.com/image/150x60/000/fff?text=Client+${i}`}
-							alt={`Client ${i}`}
+							src={url}
+							alt={url.split('/').pop()?.replace('_logo.webp', '') || 'Client logo'}
 							class="h-8 md:h-10 w-auto object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer"
 						/>
 					))
@@ -185,10 +203,10 @@ const galleryData = galleryPage?.data;
 				class="flex gap-6 md:gap-12 shrink-0 items-center justify-around min-w-full"
 			>
 				{
-					[1, 2, 3, 4, 5, 6, 7].map((i) => (
+					clientLogos.map((url) => (
 						<img
-							src={`https://dummyjson.com/image/150x60/000/fff?text=Client+${i}`}
-							alt={`Client ${i}`}
+							src={url}
+							alt={url.split('/').pop()?.replace('_logo.webp', '') || 'Client logo'}
 							class="h-8 md:h-10 w-auto object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer"
 						/>
 					))
