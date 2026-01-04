@@ -26,6 +26,44 @@
   },
   "collections": [
     {
+      "name": "system",
+      "label": "Deploy Manager",
+      "editor": {
+        "preview": false
+      },
+      "files": [
+        {
+          "name": "trigger",
+          "label": "Status Publikasi",
+          "file": "src/content/system/deploy_trigger.json",
+          "fields": [
+            {
+              "label": "Instruksi",
+              "name": "info",
+              "widget": "markdown",
+              "default": "Klik save untuk mempublikasikan perubahan di Draft ke Live Website segera."
+            },
+            {
+              "label": "Trigger Build",
+              "name": "force_build",
+              "widget": "boolean",
+              "default": false,
+              "hint": "Aktifkan dan Save untuk memaksa update sekarang."
+            },
+            {
+              "label": "Last Triggered",
+              "name": "timestamp",
+              "widget": "datetime",
+              "default": "",
+              "date_format": "YYYY-MM-DD",
+              "time_format": "HH:mm:ss",
+              "format": "YYYY-MM-DD HH:mm:ss"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "site_content",
       "label": "Site Content",
       "files": [
