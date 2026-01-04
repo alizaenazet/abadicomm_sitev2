@@ -11,31 +11,40 @@ import robotsTxt from "astro-robots-txt";
 export default defineConfig({
   site: "https://abadicomm.id",
   output: "static",
-  trailingSlash: 'never',
+  trailingSlash: "never",
+  compressHTML: true,
   build: {
-    inlineStylesheets: 'always',
-    assets: '_astro'
+    inlineStylesheets: "always",
+    assets: "_astro",
   },
   vite: {
     plugins: [tailwindcss()],
     server: {
       allowedHosts: ["abadicomm.id"],
     },
+    build: {
+      rollupOptions: {
+        output: {
+          // Consistent chunking for better caching
+          manualChunks: undefined,
+        },
+      },
+    },
   },
   integrations: [
-    svelte(), 
+    svelte(),
     sitemap({
-      filter: (page) => page !== 'https://abadicomm.id/admin/',
+      filter: (page) => page !== "https://abadicomm.id/admin/",
     }),
     robotsTxt({
       policy: [
         {
-          userAgent: '*',
-          allow: '/',
-          disallow: ['/admin/', '/admin'],
+          userAgent: "*",
+          allow: "/",
+          disallow: ["/admin/", "/admin"],
         },
       ],
       sitemap: true,
-    })
+    }),
   ],
 });

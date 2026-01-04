@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && bun run compress",
+    "compress": "find dist -type f \\( -name '*.html' -o -name '*.css' -o -name '*. js' -o -name '*.svg' -o -name '*. xml' -o -name '*.json' \\) -exec gzip -9 -k {} \\;",
     "preview": "astro preview",
     "astro": "astro",
     "build-preview": "astro build && astro preview"
