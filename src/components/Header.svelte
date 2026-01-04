@@ -46,7 +46,7 @@
   >
     <a
       href="/"
-      class="flex items-center gap-2 text-2xl font-bold tracking-tighter"
+      class="flex items-center text-2xl font-bold tracking-tighter"
       onclick={closeMenu}
     >
       <img src="/abadicommLogo.webp" alt="AbadiComm Logo" class="w-8 h-8" />

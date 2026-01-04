@@ -17,8 +17,8 @@
           "raster_image": {
             "format": "webp",
             "quality": 85,
-            "width": 1200,
-            "height": 1200
+            "width": 1920,
+            "height": 1080
           }
         }
       }

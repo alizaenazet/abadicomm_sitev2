@@ -5,10 +5,13 @@ import { ArrowLeft, Calendar, User, Tag } from "@lucide/svelte";
 
 export async function getStaticPaths() {
   const portfolios = await getCollection("portfolios");
-  return portfolios.map((entry) => ({
-    params: { slug: entry.data.title.toLowerCase().replace(/\s+/g, "-") },
-    props: { entry },
-  }));
+  return portfolios.map((entry) => {
+    const slug = entry.data.title.toLowerCase().replace(/\s+/g, "-");
+    return {
+      params: { slug },
+      props: { entry },
+    };
+  });
 }
 
 const { entry } = Astro.props;
