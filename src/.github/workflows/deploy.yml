@@ -1,0 +1,17 @@
+on:
+    push:
+        branches: ["main"]
+    repository_dispatch:
+        types: [sveltia-cms-publish]
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Show trigger event
+              run: |
+                  echo "Triggered by: ${{ github.event_name }}"
+                  echo "Event type: ${{ github.event.action }}"
+            - name: Run deployment
+              run: echo "Add your deployment steps here"
