@@ -1,5 +1,5 @@
 ---
-title: GRAND OPENING PHILIP STORE BALIKPAPAN tes woy
+title: GRAND OPENING PHILIP STORE BALIKPAPAN
 categories:
   - Soft Opening dan Grand Opening
 year: '2014'
