@@ -81,7 +81,10 @@ jobs:
             - name: Create deployment archive
               run: |
                   tar -czf deploy.tar.gz -C dist .
+                  echo "Archive created: $(pwd)/deploy.tar.gz"
                   echo "Archive size: $(du -h deploy.tar.gz | cut -f1)"
+                  echo "Files in archive: $(tar -tzf deploy.tar.gz | wc -l)"
+                  ls -lh deploy.tar.gz
 
             # ==========================================================
             # DEPLOY TO VPS
