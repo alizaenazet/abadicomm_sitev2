@@ -1,17 +1,216 @@
+name: Deploy Astro Site to Production
+
 on:
-    push:
-        branches: ["main"]
-    repository_dispatch:
-        types: [sveltia-cms-publish]
+  push:
+    branches: ["main"]
+  repository_dispatch: 
+    types: [sveltia-cms-publish]
+
+env:
+  NODE_ENV: production
+  DEPLOY_PATH: /root/stack/apps/abadicomm_sitev2/prod
 
 jobs:
-    deploy:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - name: Show trigger event
-              run: |
-                  echo "Triggered by: ${{ github.event_name }}"
-                  echo "Event type: ${{ github.event.action }}"
-            - name: Run deployment
-              run: echo "Add your deployment steps here"
+  build-and-deploy: 
+    name: Build & Deploy
+    runs-on:  ubuntu-latest
+    
+    steps: 
+      # ==========================================================
+      # CHECKOUT
+      # ==========================================================
+      - name:  Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ==========================================================
+      # SETUP BUN
+      # ==========================================================
+      - name:  Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with: 
+          bun-version: latest
+
+      # ==========================================================
+      # CACHE DEPENDENCIES
+      # ==========================================================
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with: 
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            ${{ runner. os }}-bun-
+
+      # ==========================================================
+      # INSTALL DEPENDENCIES
+      # ==========================================================
+      - name:  Install dependencies
+        run: bun install --frozen-lockfile
+
+      # ==========================================================
+      # BUILD ASTRO SITE
+      # ==========================================================
+      - name: Build Astro site
+        run:  bun run build
+
+      # ==========================================================
+      # COMPRESS STATIC ASSETS (for gzip_static)
+      # ==========================================================
+      - name: Pre-compress static assets
+        run: |
+          echo "Compressing static assets for gzip_static..."
+          find dist -type f \( \
+            -name "*.html" \
+            -o -name "*. css" \
+            -o -name "*. js" \
+            -o -name "*.svg" \
+            -o -name "*. xml" \
+            -o -name "*. json" \
+            -o -name "*.txt" \
+          \) -exec gzip -9 -k {} \;
+          
+          echo "Compression complete!"
+          echo "Compressed files count:"
+          find dist -name "*.gz" | wc -l
+
+      # ==========================================================
+      # CREATE DEPLOYMENT ARCHIVE
+      # ==========================================================
+      - name: Create deployment archive
+        run: |
+          cd dist
+          tar -czf ../deploy. tar.gz . 
+          cd ..
+          echo "Archive size: $(du -h deploy.tar.gz | cut -f1)"
+
+      # ==========================================================
+      # DEPLOY TO VPS
+      # ==========================================================
+      - name: Deploy to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with: 
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets. VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          source:  "deploy.tar. gz"
+          target: "/tmp"
+
+      # ==========================================================
+      # EXTRACT & ACTIVATE DEPLOYMENT
+      # ==========================================================
+      - name: Extract and activate deployment
+        uses: appleboy/ssh-action@master
+        with: 
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets. VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            set -e
+            
+            echo "Starting deployment..."
+            
+            DEPLOY_PATH="${{ env.DEPLOY_PATH }}"
+            DIST_PATH="${DEPLOY_PATH}/dist"
+            BACKUP_PATH="${DEPLOY_PATH}/dist.backup. $(date +%Y%m%d_%H%M%S)"
+            
+            # Create deployment directory if not exists
+            mkdir -p ${DEPLOY_PATH}
+            
+            # Backup current deployment (if exists)
+            if [ -d "${DIST_PATH}" ]; then
+              echo "Backing up current deployment..."
+              mv ${DIST_PATH} ${BACKUP_PATH}
+            fi
+            
+            # Create new dist directory
+            mkdir -p ${DIST_PATH}
+            
+            # Extract new deployment
+            echo "Extracting new deployment..."
+            tar -xzf /tmp/deploy.tar.gz -C ${DIST_PATH}
+            
+            # Set correct permissions
+            echo "Setting permissions..."
+            chown -R www-data:www-data ${DIST_PATH}
+            chmod -R 755 ${DIST_PATH}
+            
+            # Cleanup temp file
+            rm -f /tmp/deploy. tar.gz
+            
+            # Keep only last 3 backups
+            echo "🧹 Cleaning old backups..."
+            cd ${DEPLOY_PATH}
+            ls -dt dist.backup.* 2>/dev/null | tail -n +4 | xargs -r rm -rf
+            
+            # Verify deployment
+            echo "Deployment complete!"
+            echo "Deployed files:"
+            ls -la ${DIST_PATH} | head -20
+            
+            echo ""
+            echo "🎉 Site deployed successfully!"
+
+      # ==========================================================
+      # VERIFY DEPLOYMENT
+      # ==========================================================
+      - name: Verify deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with: 
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets. VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script:  |
+            DIST_PATH="${{ env.DEPLOY_PATH }}/dist"
+            
+            echo "🔍 Verifying deployment..."
+            
+            # Check if index.html exists
+            if [ -f "${DIST_PATH}/index.html" ]; then
+              echo "index.html found"
+            else
+              echo "❌ index. html not found!"
+              exit 1
+            fi
+            
+            # Check if _astro directory exists (Astro assets)
+            if [ -d "${DIST_PATH}/_astro" ]; then
+              echo "_astro directory found"
+              echo "Asset count:  $(find ${DIST_PATH}/_astro -type f | wc -l)"
+            else
+              echo "⚠️ _astro directory not found (may be empty site)"
+            fi
+            
+            # Check compressed files
+            GZ_COUNT=$(find ${DIST_PATH} -name "*. gz" | wc -l)
+            echo "Pre-compressed files:  ${GZ_COUNT}"
+            
+            # Check total size
+            echo "💾 Total deployment size: $(du -sh ${DIST_PATH} | cut -f1)"
+            
+            echo ""
+            echo "🎉 Verification complete!"
+
+  # ==========================================================
+  # NOTIFICATION (Optional)
+  # ==========================================================
+  notify:
+    name:  Notify
+    runs-on: ubuntu-latest
+    needs: build-and-deploy
+    if:  always()
+    
+    steps:
+      - name: 📢 Deployment notification
+        run: |
+          if [ "${{ needs.build-and-deploy.result }}" == "success" ]; then
+            echo "Deployment successful!"
+            echo "🌐 Site:  https://abadicomm.id"
+          else
+            echo "❌ Deployment failed!"
+            exit 1
+          fi
