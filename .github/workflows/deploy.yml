@@ -13,13 +13,13 @@ env:
 jobs:
   build-and-deploy: 
     name: Build & Deploy
-    runs-on:  ubuntu-latest
+    runs-on: ubuntu-latest
     
     steps: 
       # ==========================================================
       # CHECKOUT
       # ==========================================================
-      - name:  Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -27,7 +27,7 @@ jobs:
       # ==========================================================
       # SETUP BUN
       # ==========================================================
-      - name:  Setup Bun
+      - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with: 
           bun-version: latest
@@ -41,19 +41,19 @@ jobs:
           path: ~/.bun/install/cache
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
-            ${{ runner. os }}-bun-
+            ${{ runner.os }}-bun-
 
       # ==========================================================
       # INSTALL DEPENDENCIES
       # ==========================================================
-      - name:  Install dependencies
+      - name: Install dependencies
         run: bun install --frozen-lockfile
 
       # ==========================================================
       # BUILD ASTRO SITE
       # ==========================================================
       - name: Build Astro site
-        run:  bun run build
+        run: bun run build
 
       # ==========================================================
       # COMPRESS STATIC ASSETS (for gzip_static)
@@ -63,11 +63,11 @@ jobs:
           echo "Compressing static assets for gzip_static..."
           find dist -type f \( \
             -name "*.html" \
-            -o -name "*. css" \
-            -o -name "*. js" \
+            -o -name "*.css" \
+            -o -name "*.js" \
             -o -name "*.svg" \
-            -o -name "*. xml" \
-            -o -name "*. json" \
+            -o -name "*.xml" \
+            -o -name "*.json" \
             -o -name "*.txt" \
           \) -exec gzip -9 -k {} \;
           
@@ -80,9 +80,7 @@ jobs:
       # ==========================================================
       - name: Create deployment archive
         run: |
-          cd dist
-          tar -czf ../deploy. tar.gz . 
-          cd ..
+          tar -czf deploy.tar.gz -C dist .
           echo "Archive size: $(du -h deploy.tar.gz | cut -f1)"
 
       # ==========================================================
@@ -92,10 +90,10 @@ jobs:
         uses: appleboy/scp-action@v0.1.7
         with: 
           host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets. VPS_USER }}
+          username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
-          source:  "deploy.tar. gz"
+          source: "deploy.tar.gz"
           target: "/tmp"
 
       # ==========================================================
@@ -105,7 +103,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with: 
           host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets. VPS_USER }}
+          username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
@@ -115,7 +113,7 @@ jobs:
             
             DEPLOY_PATH="${{ env.DEPLOY_PATH }}"
             DIST_PATH="${DEPLOY_PATH}/dist"
-            BACKUP_PATH="${DEPLOY_PATH}/dist.backup. $(date +%Y%m%d_%H%M%S)"
+            BACKUP_PATH="${DEPLOY_PATH}/dist.backup.$(date +%Y%m%d_%H%M%S)"
             
             # Create deployment directory if not exists
             mkdir -p ${DEPLOY_PATH}
@@ -139,7 +137,7 @@ jobs:
             chmod -R 755 ${DIST_PATH}
             
             # Cleanup temp file
-            rm -f /tmp/deploy. tar.gz
+            rm -f /tmp/deploy.tar.gz
             
             # Keep only last 3 backups
             echo "🧹 Cleaning old backups..."
@@ -161,10 +159,10 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with: 
           host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets. VPS_USER }}
+          username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
-          script:  |
+          script: |
             DIST_PATH="${{ env.DEPLOY_PATH }}/dist"
             
             echo "🔍 Verifying deployment..."
@@ -173,21 +171,21 @@ jobs:
             if [ -f "${DIST_PATH}/index.html" ]; then
               echo "index.html found"
             else
-              echo "❌ index. html not found!"
+              echo "❌ index.html not found!"
               exit 1
             fi
             
             # Check if _astro directory exists (Astro assets)
             if [ -d "${DIST_PATH}/_astro" ]; then
               echo "_astro directory found"
-              echo "Asset count:  $(find ${DIST_PATH}/_astro -type f | wc -l)"
+              echo "Asset count: $(find ${DIST_PATH}/_astro -type f | wc -l)"
             else
               echo "⚠️ _astro directory not found (may be empty site)"
             fi
             
             # Check compressed files
-            GZ_COUNT=$(find ${DIST_PATH} -name "*. gz" | wc -l)
-            echo "Pre-compressed files:  ${GZ_COUNT}"
+            GZ_COUNT=$(find ${DIST_PATH} -name "*.gz" | wc -l)
+            echo "Pre-compressed files: ${GZ_COUNT}"
             
             # Check total size
             echo "💾 Total deployment size: $(du -sh ${DIST_PATH} | cut -f1)"
