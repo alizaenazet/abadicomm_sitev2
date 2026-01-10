@@ -8,7 +8,8 @@ on:
 
 env:
     NODE_ENV: production
-    DEPLOY_PATH: /root/stack/apps/abadicomm_sitev2/prod
+    # DONT USE SYMLINKS IN THIS PATH, IT CAUSED NGINX ERRORS
+    DEPLOY_PATH: /opt/stack/apps/abadicomm_sitev2/prod
 
 jobs:
     build-and-deploy:
