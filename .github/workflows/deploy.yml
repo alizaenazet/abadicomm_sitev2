@@ -22,7 +22,7 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
               with:
-                  fetch-depth: 0
+                  fetch-depth: 1
 
             # ==========================================================
             # SETUP BUN
@@ -80,7 +80,8 @@ jobs:
             # ==========================================================
             - name: Create deployment archive
               run: |
-                  tar -czf deploy.tar.gz -C dist .
+                  # Exclude uploads directory to reduce archive size
+                  tar -czf deploy.tar.gz -C dist --exclude='uploads' .
                   echo "Archive created: $(pwd)/deploy.tar.gz"
                   echo "Archive size: $(du -h deploy.tar.gz | cut -f1)"
                   echo "Files in archive: $(tar -tzf deploy.tar.gz | wc -l)"
@@ -90,17 +91,15 @@ jobs:
             # DEPLOY TO VPS
             # ==========================================================
             - name: Deploy to VPS
-              uses: appleboy/scp-action@master
+              uses: burnett01/rsync-deployments@7.0.1
               with:
-                  host: ${{ secrets.VPS_HOST }}
-                  username: ${{ secrets.VPS_USER }}
-                  key: ${{ secrets.VPS_SSH_KEY }}
-                  port: 22
-                  source: "deploy.tar.gz"
-                  target: "/tmp"
-                  timeout: 120s
-                  command_timeout: 10m
-                  debug: true
+                  switches: -avzr --progress --timeout=120
+                  path: deploy.tar.gz
+                  remote_path: /tmp/
+                  remote_host: ${{ secrets.VPS_HOST }}
+                  remote_user: ${{ secrets.VPS_USER }}
+                  remote_key: ${{ secrets.VPS_SSH_KEY }}
+
             # ==========================================================
             # EXTRACT & ACTIVATE DEPLOYMENT
             # ==========================================================
@@ -118,36 +117,70 @@ jobs:
 
                       DEPLOY_PATH="${{ env.DEPLOY_PATH }}"
                       DIST_PATH="${DEPLOY_PATH}/dist"
-                      BACKUP_PATH="${DEPLOY_PATH}/dist.backup.$(date +%Y%m%d_%H%M%S)"
+                      DIST_NEW_PATH="${DEPLOY_PATH}/dist_new"
+                      DIST_OLD_PATH="${DEPLOY_PATH}/dist_old"
+                      REPO_PATH="${DEPLOY_PATH}/abadicomm_sitev2"
 
                       # Create deployment directory if not exists
                       mkdir -p ${DEPLOY_PATH}
 
-                      # Backup current deployment (if exists)
-                      if [ -d "${DIST_PATH}" ]; then
-                        echo "Backing up current deployment..."
-                        mv ${DIST_PATH} ${BACKUP_PATH}
+                      # Clean up any previous failed deployment
+                      rm -rf ${DIST_NEW_PATH}
+                      rm -rf ${DIST_OLD_PATH}
+
+                      # Create new temporary dist directory
+                      mkdir -p ${DIST_NEW_PATH}
+
+                      # Extract new deployment to temporary directory
+                      echo "Extracting new deployment to temporary directory..."
+                      tar -xzf /tmp/deploy.tar.gz -C ${DIST_NEW_PATH}
+
+                      # ==========================================================
+                      # SYNC UPLOADS FROM GIT REPO
+                      # ==========================================================
+                      echo "Syncing uploads from git repository..."
+                      cd ${REPO_PATH}
+                      git fetch origin main
+                      git reset --hard origin/main
+
+                      # Create symlink for uploads directory in temp folder
+                      if [ -d "${REPO_PATH}/public/uploads" ]; then
+                        echo "Creating symlink for uploads..."
+                        ln -sfn ${REPO_PATH}/public/uploads ${DIST_NEW_PATH}/uploads
+                        echo "Symlink created: ${DIST_NEW_PATH}/uploads -> ${REPO_PATH}/public/uploads"
+                      else
+                        echo "⚠️ No uploads directory found in repo"
                       fi
 
-                      # Create new dist directory
-                      mkdir -p ${DIST_PATH}
-
-                      # Extract new deployment
-                      echo "Extracting new deployment..."
-                      tar -xzf /tmp/deploy.tar.gz -C ${DIST_PATH}
-
-                      # Set correct permissions
+                      # Set correct permissions on new deployment
                       echo "Setting permissions..."
-                      chown -R www-data:www-data ${DIST_PATH}
-                      chmod -R 755 ${DIST_PATH}
+                      chown -R www-data:www-data ${DIST_NEW_PATH}
+                      chmod -R 755 ${DIST_NEW_PATH}
+                      # Ensure repo uploads are also accessible
+                      chown -R www-data:www-data ${REPO_PATH}/public/uploads
+                      chmod -R 755 ${REPO_PATH}/public/uploads
+
+                      # ==========================================================
+                      # ATOMIC SWAP - Minimize downtime
+                      # ==========================================================
+                      echo "Performing atomic swap..."
+                      
+                      # Move current dist to old (if exists)
+                      if [ -d "${DIST_PATH}" ]; then
+                        mv ${DIST_PATH} ${DIST_OLD_PATH}
+                      fi
+                      
+                      # Swap new to current (this is the only moment of potential 404)
+                      mv ${DIST_NEW_PATH} ${DIST_PATH}
+                      
+                      echo "✅ Swap complete!"
 
                       # Cleanup temp file
                       rm -f /tmp/deploy.tar.gz
 
-                      # Keep only last 3 backups
-                      echo "🧹 Cleaning old backups..."
-                      cd ${DEPLOY_PATH}
-                      ls -dt dist.backup.* 2>/dev/null | tail -n +4 | xargs -r rm -rf
+                      # Clean up old deployment
+                      echo "🧹 Cleaning up old deployment..."
+                      rm -rf ${DIST_OLD_PATH}
 
                       # Verify deployment
                       echo "Deployment complete!"
@@ -155,7 +188,7 @@ jobs:
                       ls -la ${DIST_PATH} | head -20
 
                       echo ""
-                      echo "🎉 Site deployed successfully!"
+                      echo "🎉 Site deployed successfully with zero-downtime swap!"
 
             # ==========================================================
             # VERIFY DEPLOYMENT
