@@ -120,7 +120,7 @@ jobs:
             # DEPLOY TO VPS
             # ==========================================================
             - name: Deploy to VPS
-              uses: burnett01/rsync-deployments@7.0.1
+              uses: burnett01/rsync-deployments@v8
               with:
                   switches: -avzr --progress --timeout=120
                   path: deploy.tar.gz
