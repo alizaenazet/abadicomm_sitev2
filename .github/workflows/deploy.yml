@@ -56,13 +56,11 @@ jobs:
               run: bun run build
 
             # ==========================================================
-            # CONVERT OG IMAGES TO JPEG
+            # SETUP FFMPEG
             # ==========================================================
             - name: Convert OG images to JPEG
-              run: |
-                  echo "Installing ffmpeg..."
-                  sudo apt-get update && sudo apt-get install -y ffmpeg
-                  
+              uses: AnimMouse/setup-ffmpeg@v1
+            - run: |
                   echo "Converting OG images from PNG to JPEG (80% quality)..."
                   
                   OG_DIR="dist/open-graph"
