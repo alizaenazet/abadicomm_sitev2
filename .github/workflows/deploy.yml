@@ -56,6 +56,33 @@ jobs:
               run: bun run build
 
             # ==========================================================
+            # CONVERT OG IMAGES TO JPEG
+            # ==========================================================
+            - name: Convert OG images to JPEG
+              run: |
+                  echo "Converting OG images from PNG to JPEG (80% quality)..."
+                  
+                  OG_DIR="dist/open-graph"
+                  
+                  if [ -d "${OG_DIR}" ]; then
+                    PNG_COUNT=$(find ${OG_DIR} -name "*.png" | wc -l)
+                    echo "Found ${PNG_COUNT} PNG files to convert"
+                    
+                    # Convert each PNG to JPEG using ffmpeg with 80% quality
+                    find ${OG_DIR} -name "*.png" | while read png_file; do
+                      jpeg_file="${png_file%.png}.jpeg"
+                      echo "Converting: ${png_file} -> ${jpeg_file}"
+                      ffmpeg -i "${png_file}" -qscale:v 5 "${jpeg_file}" -y
+                      rm -f "${png_file}"
+                    done
+                    
+                    echo "Conversion complete!"
+                    echo "JPEG files created: $(find ${OG_DIR} -name "*.jpeg" | wc -l)"
+                  else
+                    echo "⚠️ No open-graph directory found, skipping conversion"
+                  fi
+
+            # ==========================================================
             # COMPRESS STATIC ASSETS (for gzip_static)
             # ==========================================================
             - name: Pre-compress static assets

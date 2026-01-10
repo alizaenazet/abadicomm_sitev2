@@ -46,7 +46,7 @@ console.log("OGIMAGE URL:", ogImage	);
 				basic: {
 					title: openGraphTitle,
 					type: openGraphType,
-					image: ogImage,
+					image: ogImage.replace(/\.png$/, '.jpeg'),
 					url: Astro.url.href
 				}
 			}}
