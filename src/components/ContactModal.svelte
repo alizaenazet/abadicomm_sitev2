@@ -45,7 +45,7 @@
     return `${greeting}${intro} ${purpose}%0A${extraInfo}%0A Senang dapat menghubungi anda.%0ATerimakasih`;
   })();
 
-  let whatsappNumber = "6282132478719"; // TODO: MAKE IT CONFIGURABLE IN SVELTIA
+  let whatsappNumber = "6281332350902"; // TODO: MAKE IT CONFIGURABLE IN SVELTIA
 
   $: isFormFilled =
     name &&
