@@ -17,4 +17,4 @@ description: Sunatan untuk kemanusiaan
 
 Sunatan dilakukan masal dan bersama-sama secara offline
 
-pendafatan melalui WhatsApp: 082132478719
+pendafatan melalui WA: 082132478719
