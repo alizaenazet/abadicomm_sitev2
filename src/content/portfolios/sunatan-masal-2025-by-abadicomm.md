@@ -3,6 +3,7 @@ title: Sunatan masal 2025 by Abadicomm
 categories:
   - Anniversary
   - Sosialisasi
+  - Kegiatan Masyarakat
 year: '2026'
 hosters:
   - Abadicomm
